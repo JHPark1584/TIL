@@ -60,9 +60,10 @@ export default function example() {
 	function draw() {
 		const delta = clock.getDelta();
 
-		mesh.position.set(-1, 2, -5); // 위치 조정은 position
+		// mesh.position.set(-1, 2, -5); // 위치 조정은 position
+        mesh.scale.set(0.5, 1, 2);
 
-		console.log(mesh.position.length());
+        camera.lookAt(mesh.position);
 
 		renderer.render(scene, camera);
 		renderer.setAnimationLoop(draw);

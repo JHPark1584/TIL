@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import dat from 'dat.gui';
 
-// ----- 주제: 
+// ----- 주제: 그룹 만들기 (Scene Graph)
 
 export default function example() {
 	// Renderer
@@ -39,10 +39,27 @@ export default function example() {
 	// Mesh
 	const geometry = new THREE.BoxGeometry(1, 1, 1);
 	const material = new THREE.MeshStandardMaterial({
-		color: 'seagreen'
+		color: 'hotpink'
 	});
-	const mesh = new THREE.Mesh(geometry, material);
-	scene.add(mesh);
+    
+    const group1 = new THREE.Group();
+	const box1 = new THREE.Mesh(geometry, material);
+
+    const group2 = new THREE.Group();
+	const box2 = box1.clone(); // box1의 클론
+    box2.scale.set(0.3, 0.3, 0.3);
+    group2.position.x = 2;
+
+    const group3 = new THREE.Group();
+    const box3 = box2.clone();
+    box3.scale.set(0.15, 0.15, 0.15);
+    box3.position.x = 0.5;
+
+    group3.add(box3);
+    group2.add(box2, group3);
+    group1.add(box1, group2);
+    scene.add(group1)
+	
 
 	// AxesHelper
 	const axesHelper = new THREE.AxesHelper(3);
@@ -60,9 +77,9 @@ export default function example() {
 	function draw() {
 		const delta = clock.getDelta();
 
-		mesh.position.set(-1, 2, -5); // 위치 조정은 position
-
-		console.log(mesh.position.length());
+        group1.rotation.y += delta / 4;
+        group2.rotation.y += delta / 2;
+        group3.rotation.y += delta;
 
 		renderer.render(scene, camera);
 		renderer.setAnimationLoop(draw);
